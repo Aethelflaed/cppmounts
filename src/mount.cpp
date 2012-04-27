@@ -73,7 +73,7 @@ void filesystem::mount::load()
 	}
 	else
 	{
-		//TODO
+		throw std::runtime_error("Unable to open /proc/mounts");
 	}
 #endif /* __APPLE__ */
 }
