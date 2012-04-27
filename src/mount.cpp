@@ -1,4 +1,5 @@
 #include "mount.hpp"
+#include <iostream>
 
 #define load_mounts if (mounts.empty()) { load(); }
 
@@ -7,6 +8,7 @@ std::vector<filesystem::mount> filesystem::mount::mounts;
 filesystem::mount& filesystem::mount::for_path(const std::string& path)
 {
 	load_mounts;
+	return mounts[0];
 }
 
 const std::vector<filesystem::mount>& filesystem::mount::all()
@@ -18,12 +20,12 @@ const std::vector<filesystem::mount>& filesystem::mount::all()
 void filesystem::mount::load()
 {
 #ifdef __APPLE__
-	MNTENT** entities;
-	if (int count = getmntinfo(entities, MNT_NOWAIT))
+	MNTENT* entities;
+	if (int count = getmntinfo(&entities, MNT_WAIT))
 	{
 		for (int i = 0; i < count; i++)
 		{
-			mounts.push_back(filesystem::mount(entities[i]));
+			mounts.push_back(filesystem::mount(&entities[i]));
 		}
 	}
 	else
