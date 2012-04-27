@@ -13,6 +13,14 @@ int main(int argc, const char** argv)
 			mounts[i].getType() << "\t" <<
 			std::endl;
 	}
+
+	std::cout << "Search /Users/geoffroy/Desktop/:" << std::endl;
+	filesystem::mount* mount = filesystem::mount::for_path("/Users/geoffroy/Desktop/");
+	std::cout <<
+		mount->getName() << "\t" <<
+		mount->getPath() << "\t" <<
+		mount->getType() << "\t" <<
+		std::endl;
 	return 0;
 }
 
