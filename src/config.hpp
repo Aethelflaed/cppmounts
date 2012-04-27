@@ -6,12 +6,22 @@
 #endif
 
 #ifndef NOEXCEPT
-#	if __cplusplus == 201103L /* C++11 */
+#	if __cplusplus > 199711L /* C++11 */
 #		define NOEXCEPT noexcept (true)
 #	else
 #		define NOEXCEPT throw ()
 #	endif
-#endif
+#endif /* NOEXCEPT */
+
+#ifndef SET
+#	if __cplusplus > 199711L /* C++11 */
+#		include <unordered_set>
+#		define SET unordered_set
+#	else
+#		include <set>
+#		define SET set
+#	endif
+#endif /* SET */
 
 #ifndef MNTENT
 #	ifdef __APPLE__
@@ -24,7 +34,7 @@
 #		include <mntent.h>
 #		define MNTENT struct mntent
 #	endif /* __APPLE__ */
-#endif
+#endif /* MNTENT */
 
 #endif /* CPPMOUNTS_CONFIG_HPP */
 
