@@ -27,6 +27,7 @@ namespace filesystem
 		std::string name;
 		std::string path;
 		std::string type;
+		dev_t st_dev;
 	};
 }
 
