@@ -52,7 +52,7 @@ void filesystem::mount::load()
 	}
 #else
 	FILE* fh;
-	if (fh = setmntent("/proc/mounts", "r"))
+	if ((fh = setmntent("/proc/mounts", "r")))
 	{
 		while (MNTENT* entity = getmntent(fh))
 		{
