@@ -61,14 +61,17 @@ filesystem::mount::mount(const MNTENT* entity) NOEXCEPT
 	type = entity->mnt_type;
 #endif /* __APPLE__ */
 
-	struct stat file_stat;
-	if (stat(name.c_str(), &file_stat) == 0)
+	if (path.empty() == false)
 	{
-		st_dev = file_stat.st_dev;
-	}
-	else
-	{
-		//TODO
+		struct stat file_stat;
+		if (stat(path.c_str(), &file_stat) == 0)
+		{
+			st_dev = file_stat.st_dev;
+		}
+		else
+		{
+			//TODO
+		}
 	}
 }
 
