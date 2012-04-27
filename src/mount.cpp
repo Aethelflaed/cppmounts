@@ -17,27 +17,7 @@ filesystem::mount* filesystem::mount::for_path(const std::string& absolute_path)
 	}
 	else
 	{
-		switch(errno)
-		{
-			case EACCES:
-				throw std::runtime_error("Access to file denied");
-			case EFAULT:
-				throw std::runtime_error("Invalid address");
-			case EIO:
-				throw std::runtime_error("I/O error");
-			case ELOOP:
-				throw std::runtime_error("Too many symlinks");
-			case ENAMETOOLONG:
-				throw std::invalid_argument("Path too long (or one of its components)");
-			case ENOENT:
-				throw std::invalid_argument("Path doesn't correspond to any file");
-			case ENOTDIR:
-				throw std::invalid_argument("A component of the path is not a directory");
-			case EOVERFLOW:
-				throw std::runtime_error("Buffer size error");
-			default:
-				throw std::runtime_error("Unknow error");
-		}
+		check_stat_errno();
 		return 0;
 	}
 	for (size_t i = 0; i < mounts.size(); i++)
@@ -98,6 +78,31 @@ void filesystem::mount::load()
 #endif /* __APPLE__ */
 }
 
+void filesystem::mount::check_stat_errno()
+{
+	switch(errno)
+	{
+		case EACCES:
+			throw std::runtime_error("Access to file denied");
+		case EFAULT:
+			throw std::runtime_error("Invalid address");
+		case EIO:
+			throw std::runtime_error("I/O error");
+		case ELOOP:
+			throw std::runtime_error("Too many symlinks");
+		case ENAMETOOLONG:
+			throw std::invalid_argument("Path too long (or one of its components)");
+		case ENOENT:
+			throw std::invalid_argument("Path doesn't correspond to any file");
+		case ENOTDIR:
+			throw std::invalid_argument("A component of the path is not a directory");
+		case EOVERFLOW:
+			throw std::runtime_error("Buffer size error");
+		default:
+			throw std::runtime_error("Unknow error");
+	}
+}
+
 filesystem::mount::mount(const MNTENT* entity)
 	:st_dev(0)
 {
@@ -120,7 +125,7 @@ filesystem::mount::mount(const MNTENT* entity)
 		}
 		else
 		{
-			//TODO
+			check_stat_errno();
 		}
 	}
 }

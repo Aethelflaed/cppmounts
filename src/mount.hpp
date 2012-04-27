@@ -20,6 +20,7 @@ namespace filesystem
 
 	private:
 		static void load();
+		static void check_stat_errno();
 		mount(const MNTENT* entity);
 
 		static std::vector<mount> mounts;
