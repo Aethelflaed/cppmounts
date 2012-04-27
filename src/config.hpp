@@ -15,6 +15,7 @@
 
 extern "C"
 {
+#include <errno.h>
 
 #include <sys/stat.h>
 #ifndef __APPLE__
