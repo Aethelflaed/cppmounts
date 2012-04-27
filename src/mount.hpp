@@ -11,7 +11,7 @@ namespace filesystem
 	class mount
 	{
 	public:
-		static mount* for_path(const std::string& path);
+		static mount* for_path(const std::string& absolute_path);
 		static const std::vector<mount>& all();
 
 		const std::string& getName() const NOEXCEPT;
