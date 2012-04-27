@@ -14,6 +14,8 @@
 #endif /* NOEXCEPT */
 
 #ifndef MNTENT
+extern "C"
+{
 #	ifdef __APPLE__
 #		include <sys/param.h>
 #		include <sys/ucred.h>
@@ -24,6 +26,7 @@
 #		include <mntent.h>
 #		define MNTENT struct mntent
 #	endif /* __APPLE__ */
+}
 #endif /* MNTENT */
 
 #endif /* CPPMOUNTS_CONFIG_HPP */
