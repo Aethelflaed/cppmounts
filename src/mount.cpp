@@ -1,6 +1,53 @@
 #include "mount.hpp"
 
-mount::mount(const MNTENT* entity) NOEXCEPT
+#define load_mounts if (mounts.empty()) { load(); }
+
+std::vector<filesystem::mount> filesystem::mount::mounts;
+
+filesystem::mount& filesystem::mount::for_path(const std::string& path)
+{
+	load_mounts;
+}
+
+const std::vector<filesystem::mount>& filesystem::mount::all()
+{
+	load_mounts;
+	return mounts;
+}
+
+void filesystem::mount::load()
+{
+#ifdef __APPLE__
+	MNTENT** entities;
+	if (int count = getmntinfo(entities, MNT_NOWAIT))
+	{
+		for (int i = 0; i < count; i++)
+		{
+			mounts.push_back(filesystem::mount(entities[i]));
+		}
+	}
+	else
+	{
+		//TODO
+	}
+#else
+	FILE* fh;
+	if (fh = setmntent("/proc/mounts", "r"))
+	{
+		while (MNTENT* entity = getmntent(fh))
+		{
+			mounts.push_back(filesystem::mount(entity));
+		}
+		endmntent(fh);
+	}
+	else
+	{
+		//TODO
+	}
+#endif /* __APPLE__ */
+}
+
+filesystem::mount::mount(const MNTENT* entity) NOEXCEPT
 {
 #ifdef __APPLE__
 	name = entity->f_mntfromname;
@@ -13,17 +60,17 @@ mount::mount(const MNTENT* entity) NOEXCEPT
 #endif /* __APPLE__ */
 }
 
-const std::string& mount::getName() const NOEXCEPT
+const std::string& filesystem::mount::getName() const NOEXCEPT
 {
 	return this->name;
 }
 
-const std::string& mount::getPath() const NOEXCEPT
+const std::string& filesystem::mount::getPath() const NOEXCEPT
 {
 	return this->path;
 }
 
-const std::string& mount::getType() const NOEXCEPT
+const std::string& filesystem::mount::getType() const NOEXCEPT
 {
 	return this->type;
 }
