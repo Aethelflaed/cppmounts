@@ -1,6 +1,6 @@
 #include "mount.hpp"
 
-mount::mount(const MNTENT* entity)
+mount::mount(const MNTENT* entity) NOEXCEPT
 {
 #ifdef __APPLE__
 	name = entity->f_mntfromname;
