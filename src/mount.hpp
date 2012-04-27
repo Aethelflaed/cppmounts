@@ -20,7 +20,7 @@ namespace filesystem
 
 	private:
 		static void load();
-		mount(const MNTENT* entity) NOEXCEPT;
+		mount(const MNTENT* entity);
 
 		static std::vector<mount> mounts;
 

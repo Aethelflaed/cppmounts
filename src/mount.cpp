@@ -49,7 +49,8 @@ void filesystem::mount::load()
 #endif /* __APPLE__ */
 }
 
-filesystem::mount::mount(const MNTENT* entity) NOEXCEPT
+filesystem::mount::mount(const MNTENT* entity)
+	:st_dev(0)
 {
 #ifdef __APPLE__
 	name = entity->f_mntfromname;
