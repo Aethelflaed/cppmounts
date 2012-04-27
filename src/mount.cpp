@@ -5,10 +5,28 @@
 
 std::vector<filesystem::mount> filesystem::mount::mounts;
 
-filesystem::mount& filesystem::mount::for_path(const std::string& path)
+filesystem::mount* filesystem::mount::for_path(const std::string& path)
 {
 	load_mounts;
-	return mounts[0];
+	dev_t st_dev = 0;
+	struct stat file_stat;
+	if (stat(path.c_str(), &file_stat) == 0)
+	{
+		st_dev = file_stat.st_dev;
+	}
+	else
+	{
+		//TODO throw
+		return 0;
+	}
+	for (size_t i = 0; i < mounts.size(); i++)
+	{
+		if (mounts[i].st_dev == st_dev)
+		{
+			return &mounts[i];
+		}
+	}
+	return 0;
 }
 
 const std::vector<filesystem::mount>& filesystem::mount::all()
