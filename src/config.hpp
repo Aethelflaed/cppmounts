@@ -13,16 +13,6 @@
 #	endif
 #endif /* NOEXCEPT */
 
-#ifndef SET
-#	if __cplusplus > 199711L /* C++11 */
-#		include <unordered_set>
-#		define SET unordered_set
-#	else
-#		include <set>
-#		define SET set
-#	endif
-#endif /* SET */
-
 #ifndef MNTENT
 #	ifdef __APPLE__
 #		include <sys/param.h>
