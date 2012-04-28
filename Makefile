@@ -29,9 +29,7 @@ endef
 
 program=$(bindir)/lib$(program_name).so
 
-all: debug $(localdirs) $(program)
-
-debug:
+all: $(localdirs) $(program)
 
 clean:
 	$(RM) -r $(objdir)
