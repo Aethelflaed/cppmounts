@@ -1,6 +1,7 @@
 obj/
 bin/
 lib/
+include/
 
 Makefile
 config.h
