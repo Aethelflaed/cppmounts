@@ -41,13 +41,11 @@ extern "C"
 #include <string>
 #include <vector>
 
-namespace filesystem
+class cppmounts
 {
-	class mount
-	{
 	public:
-		static mount* for_path(const std::string& absolute_path);
-		static const std::vector<mount>& all();
+		static cppmounts* for_path(const std::string& absolute_path);
+		static const std::vector<cppmounts>& all();
 
 		const std::string& getName() const NOEXCEPT;
 		const std::string& getPath() const NOEXCEPT;
@@ -56,16 +54,15 @@ namespace filesystem
 	private:
 		static void load();
 		static void check_stat_errno();
-		mount(const MNTENT* entity);
+		cppmounts(const MNTENT* entity);
 
-		static std::vector<mount> mounts;
+		static std::vector<cppmounts> mounts;
 
 		std::string name;
 		std::string path;
 		std::string type;
 		dev_t st_dev;
-	};
-}
+};
 
 #endif /* CPPMOUNTS_HPP */
 

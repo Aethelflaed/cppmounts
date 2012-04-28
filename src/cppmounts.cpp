@@ -4,9 +4,9 @@
 
 #define load_mounts if (mounts.empty()) { load(); }
 
-std::vector<filesystem::mount> filesystem::mount::mounts;
+std::vector<cppmounts> cppmounts::mounts;
 
-filesystem::mount* filesystem::mount::for_path(const std::string& absolute_path)
+cppmounts* cppmounts::for_path(const std::string& absolute_path)
 {
 	load_mounts;
 	dev_t st_dev = 0;
@@ -30,13 +30,13 @@ filesystem::mount* filesystem::mount::for_path(const std::string& absolute_path)
 	return 0;
 }
 
-const std::vector<filesystem::mount>& filesystem::mount::all()
+const std::vector<cppmounts>& cppmounts::all()
 {
 	load_mounts;
 	return mounts;
 }
 
-void filesystem::mount::load()
+void cppmounts::load()
 {
 #ifdef __APPLE__
 	MNTENT* entities;
@@ -44,7 +44,7 @@ void filesystem::mount::load()
 	{
 		for (int i = 0; i < count; i++)
 		{
-			mounts.push_back(filesystem::mount(&entities[i]));
+			mounts.push_back(cppmounts(&entities[i]));
 		}
 	}
 	else
@@ -67,7 +67,7 @@ void filesystem::mount::load()
 	{
 		while (MNTENT* entity = getmntent(fh))
 		{
-			mounts.push_back(filesystem::mount(entity));
+			mounts.push_back(cppmounts(entity));
 		}
 		endmntent(fh);
 	}
@@ -78,7 +78,7 @@ void filesystem::mount::load()
 #endif /* __APPLE__ */
 }
 
-void filesystem::mount::check_stat_errno()
+void cppmounts::check_stat_errno()
 {
 	switch(errno)
 	{
@@ -103,7 +103,7 @@ void filesystem::mount::check_stat_errno()
 	}
 }
 
-filesystem::mount::mount(const MNTENT* entity)
+cppmounts::cppmounts(const MNTENT* entity)
 	:st_dev(0)
 {
 #ifdef __APPLE__
@@ -130,17 +130,17 @@ filesystem::mount::mount(const MNTENT* entity)
 	}
 }
 
-const std::string& filesystem::mount::getName() const NOEXCEPT
+const std::string& cppmounts::getName() const NOEXCEPT
 {
 	return this->name;
 }
 
-const std::string& filesystem::mount::getPath() const NOEXCEPT
+const std::string& cppmounts::getPath() const NOEXCEPT
 {
 	return this->path;
 }
 
-const std::string& filesystem::mount::getType() const NOEXCEPT
+const std::string& cppmounts::getType() const NOEXCEPT
 {
 	return this->type;
 }
