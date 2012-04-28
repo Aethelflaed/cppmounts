@@ -3,6 +3,8 @@ bin/
 lib/
 include/
 
+man/*.gz
+
 Makefile
 config.h
 config.log
