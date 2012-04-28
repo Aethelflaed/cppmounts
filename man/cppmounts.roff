@@ -6,7 +6,7 @@ cppmounts \- an open source C++ library to list mac or linux mounts
 #include <cppmounts.hpp>
 
 static const std::vector<cppmounts>& cppmounts::all();
-static cppmounts* cppmounts::for_path(const std::string& absolute_path);
+static const cppmounts* cppmounts::for_path(const std::string& absolute_path);
 
 const std::string& cppmounts::getName() const noexcept;
 const std::string& cppmounts::getPath() const noexcept;
