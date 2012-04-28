@@ -1,6 +1,22 @@
+source := @srcdir@
+prefix := @prefix@
+exec_prefix := @exec_prefix@
+ifneq ($(DESTDIR),)
+	prefix := $(DESTDIR)@prefix@
+	exec_prefix := $(DESTDIR)@exec_prefix@
+endif
+
+CPPFLAGS := @CPPFLAGS@
+LDFLAGS := @LDFLAGS@
+
 include Makefile.conf
 
-srcdir := src
+install_include := $(prefix)/include
+install_lib := $(prefix)/lib
+install_man := $(prefix)/share/man/man3
+
+srcdir := $(source)/src
+mandir := $(source)/man
 bindir := bin
 libdir := lib
 objdir := obj
@@ -14,8 +30,6 @@ staticobjsdir := $(staticobjdir)
 staticobjsdir += $(addprefix $(staticobjdir)/, $(modules))
 sharedobjsdir := $(sharedobjdir)
 sharedobjsdir += $(addprefix $(sharedobjdir)/, $(modules))
-objsdir := $(objdir)
-objsdir += $(addprefix $(objdir)/, $(modules))
 
 srcs := $(foreach sdir, $(srcsdir), $(wildcard $(sdir)/*.cpp))
 staticobjs := $(patsubst $(srcdir)/%.cpp, $(staticobjdir)/%.o, $(foreach sdir, $(srcsdir), $(wildcard $(sdir)/*.cpp)))
@@ -39,14 +53,31 @@ $1/%.o: %.cpp
 	$(CPP) -c $$< -o $$@ $(CPPSHAREDFLAGS) $(INCLUDES)
 endef
 
-shared=$(bindir)/lib$(program_name).so
-static=$(bindir)/lib$(program_name).a
+shared=$(libdir)/lib$(program_name).so
+static=$(libdir)/lib$(program_name).a
 
-all: $(localdirs) $(shared) $(static)
+all: $(localdirs) $(shared) $(static) headers
+
+install: all doc
+	mkdir -p $(install_include)
+	mkdir -p $(install_lib)
+	mkdir -p $(install_man)
+	cp $(libdir)/* $(install_lib)
+	cp $(srcdir)/*.hpp $(install_include)
+	cp $(mandir)/*.gz $(install_man)
+
+doc:
+
+headers:
+	cp $(srcdir)/*.hpp $(incdir)
 
 clean:
 	$(RM) -r $(objdir)
 	$(RM) -r $(bindir)
+	$(RM) config.h
+	$(RM) config.log
+	$(RM) config.status
+	$(RM) Makefile
 
 $(shared): $(sharedobjs)
 	$(LD) $(LDFLAGS) $(LIBS) $^ -o $@
