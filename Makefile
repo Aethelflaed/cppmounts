@@ -27,7 +27,7 @@ $1/%.o: %.cpp
 	$(CPP) -c $$< -o $$@ $(CPPFLAGS) $(INCLUDES)
 endef
 
-program=$(bindir)/$(program_name)
+program=$(bindir)/lib$(program_name).so
 
 all: debug $(localdirs) $(program)
 
