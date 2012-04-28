@@ -1,6 +1,11 @@
 source := @srcdir@
 prefix := @prefix@
 exec_prefix := @exec_prefix@
+
+real_include := $(prefix)/include
+real_lib := $(prefix)/lib
+real_man := $(prefix)/share/man/man3
+
 ifneq ($(DESTDIR),)
 	prefix := $(DESTDIR)@prefix@
 	exec_prefix := $(DESTDIR)@exec_prefix@
@@ -67,6 +72,8 @@ install: all doc
 	cp $(mandir)/*.gz $(install_man)
 
 doc:
+	sed -e "s#{libdir}#${real_lib}#g" -e "s#{PRODUCT_NAME}#${program_name}#g" -e "s#{headerdir}#${real_include}#g" man/cppmounts.roff > man/cppmounts.3
+	gzip -f man/cppmounts.3
 
 headers:
 	cp $(srcdir)/*.hpp $(incdir)
@@ -74,6 +81,7 @@ headers:
 clean:
 	$(RM) -r $(objdir)
 	$(RM) -r $(bindir)
+	$(RM) $(mandir)/*.gz
 	$(RM) config.h
 	$(RM) config.log
 	$(RM) config.status
