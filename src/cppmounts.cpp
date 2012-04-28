@@ -6,7 +6,7 @@
 
 std::vector<cppmounts> cppmounts::mounts;
 
-cppmounts* cppmounts::for_path(const std::string& absolute_path)
+const cppmounts* cppmounts::for_path(const std::string& absolute_path)
 {
 	load_mounts;
 	dev_t st_dev = 0;

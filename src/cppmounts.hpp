@@ -44,7 +44,7 @@ extern "C"
 class cppmounts
 {
 	public:
-		static cppmounts* for_path(const std::string& absolute_path);
+		static const cppmounts* for_path(const std::string& absolute_path);
 		static const std::vector<cppmounts>& all();
 
 		const std::string& getName() const NOEXCEPT;

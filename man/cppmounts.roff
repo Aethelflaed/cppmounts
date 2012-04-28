@@ -2,8 +2,25 @@
 .TH man 3 "29 April 2012" "1.0" "cppmounts man page"
 .SH NAME
 cppmounts \- an open source C++ library to list mac or linux mounts
+.SH SYNOPSIS
+#include <cppmounts.hpp>
+
+static const std::vector<cppmounts>& cppmounts::all();
+static const cppmounts* cppmounts::for_path(const std::string& absolute_path);
+
+const std::string& cppmounts::getName() const noexcept;
+const std::string& cppmounts::getPath() const noexcept;
+const std::string& cppmounts::getType() const noexcept;
+
+Note: noexcept is replaced by throw() when not compiled with --std=c++11.
 .SH DESCRIPTION
-cppmounts is an open source C++ library to list mac or linux mounts using an easy to use interface.
+cppmounts is an open source C++ library to list mac or linux mounts using an easy to use interface. The library is designed for read-only access.
+
+cppmounts is an opaque class around mount entities (either mntent or statfs depending on the platform) which permits to access main functionalities (name, path and type).
+
+cppmounts::all() returns a vector of cppmounts instances, i.e. all mount points.
+
+cppmounts::for_path returns the mount point of the disk on which the given file is.
 
 .SH FILES
 The header files are located in {headerdir} directory.
